@@ -95,6 +95,24 @@ def swiss_deductions(swiss: swiss_tax.SwissTaxResult, rate: Decimal) -> dict:
         "hypothetical_swiss_tax": tax,
         "hypothetical_swiss_social_security": social_security,
         "total": tax + social_security,
+        "sources": {
+            "hypothetical_swiss_tax": [
+                swiss_tax.SOURCES[key]
+                for key in (
+                    "federal_tariff_2026",
+                    "zurich_tariff_and_deductions_2026",
+                    "canton_multiplier",
+                    "city_multiplier",
+                    "personal_tax",
+                    "federal_professional_expenses",
+                    "federal_insurance_premiums",
+                )
+            ],
+            "hypothetical_swiss_social_security": [
+                swiss_tax.SOURCES[key]
+                for key in ("ahv_iv_eo_rate", "alv_rate_and_ceiling", "social_security_rates_2026")
+            ],
+        },
     }
 
 
@@ -191,6 +209,7 @@ def estimate_year(
             "tax_bands": tax_bands,
             "employer_charges": employer_charges(),
             "total": gross_up.tax,
+            "sources": list(uk_tax.SOURCES.values()),
         },
         "deductions": deductions,
         "total_employer_cost": total,
@@ -218,6 +237,8 @@ def swiss_working(swiss: swiss_tax.SwissTaxResult) -> dict:
         "social_security_total_chf": swiss.social_security.total,
         "net_salary_chf": swiss.net_salary,
         "professional_expenses_chf": swiss.professional_expenses,
+        "federal_insurance_deduction_chf": swiss_tax.FEDERAL_INSURANCE_DEDUCTION,
+        "zurich_insurance_deduction_chf": swiss_tax.ZURICH_INSURANCE_DEDUCTION,
         "federal_taxable_income_chf": swiss.federal_taxable_income,
         "zurich_taxable_income_chf": swiss.zurich_taxable_income,
         "federal_tax_chf": swiss.federal_tax,

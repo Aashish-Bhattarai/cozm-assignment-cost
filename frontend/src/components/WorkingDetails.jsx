@@ -9,6 +9,8 @@ const SWISS_WORKING_LABELS = {
   social_security_total_chf: "Social security total",
   net_salary_chf: "Net salary",
   professional_expenses_chf: "Less: professional expenses",
+  federal_insurance_deduction_chf: "Less: insurance premiums (federal)",
+  zurich_insurance_deduction_chf: "Less: insurance premiums (Zurich)",
   federal_taxable_income_chf: "Federal taxable income",
   zurich_taxable_income_chf: "Zurich taxable income",
   federal_tax_chf: "Federal tax",
@@ -81,7 +83,7 @@ export default function WorkingDetails({ hostTax, swissWorking, yearLabel }) {
       </p>
       <ol className="iterations">
         {hostTax.iterations.map((iteration, index) => (
-          <li key={index}>{iteration}</li>
+          <li key={index}>{formatGBP(iteration)}</li>
         ))}
       </ol>
 

@@ -4,6 +4,7 @@ import AssignmentSummary from "./AssignmentSummary.jsx";
 import AssumptionsList from "./AssumptionsList.jsx";
 import CostForm from "./CostForm.jsx";
 import SocialSecurityNote from "./SocialSecurityNote.jsx";
+import SourcesList from "./SourcesList.jsx";
 import WorkingDetails from "./WorkingDetails.jsx";
 import YearCostTable from "./YearCostTable.jsx";
 
@@ -39,6 +40,8 @@ export default function CostEstimateTab() {
     setIsLoading(false);
 
     if (apiErrors) {
+      // Never leave a table for old inputs on screen next to an error.
+      setResult(null);
       setErrors(apiErrors);
       return;
     }
@@ -72,6 +75,7 @@ export default function CostEstimateTab() {
 
           <SocialSecurityNote socialSecurity={result.social_security} />
           <AssumptionsList assumptions={result.assumptions} />
+          <SourcesList sources={result.sources} />
         </div>
       )}
     </div>

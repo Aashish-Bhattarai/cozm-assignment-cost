@@ -1,5 +1,5 @@
 import { formatGBP, formatMultiple } from "../format.js";
-import SourceLink from "./SourceLink.jsx";
+import SourceLink, { SourceLinks } from "./SourceLink.jsx";
 
 // The section headings follow the order of the brief.
 function SectionRow({ title }) {
@@ -87,7 +87,10 @@ export default function YearCostTable({ year }) {
             </small>
           </td>
           <td className="money">{formatGBP(hostTax.uk_income_tax)}</td>
-          <td colSpan={3} />
+          <td colSpan={2} />
+          <td>
+            <SourceLinks sources={hostTax.sources} />
+          </td>
         </tr>
         {hostTax.employer_charges.map((charge) => (
           <tr key={charge.name}>
@@ -96,7 +99,10 @@ export default function YearCostTable({ year }) {
               <small className="row-note">{charge.reason}</small>
             </td>
             <td className="money">{formatGBP(charge.amount)}</td>
-            <td colSpan={3} />
+            <td colSpan={2} />
+            <td>
+              <SourceLink source={charge.source} />
+            </td>
           </tr>
         ))}
         <tr className="subtotal-row">
@@ -116,7 +122,10 @@ export default function YearCostTable({ year }) {
             </small>
           </td>
           <td className="money">-{formatGBP(deductions.hypothetical_swiss_tax)}</td>
-          <td colSpan={3} />
+          <td colSpan={2} />
+          <td>
+            <SourceLinks sources={deductions.sources.hypothetical_swiss_tax} />
+          </td>
         </tr>
         <tr>
           <td>
@@ -128,7 +137,10 @@ export default function YearCostTable({ year }) {
           <td className="money">
             -{formatGBP(deductions.hypothetical_swiss_social_security)}
           </td>
-          <td colSpan={3} />
+          <td colSpan={2} />
+          <td>
+            <SourceLinks sources={deductions.sources.hypothetical_swiss_social_security} />
+          </td>
         </tr>
         <tr className="subtotal-row">
           <td>Deductions total</td>
@@ -139,7 +151,13 @@ export default function YearCostTable({ year }) {
 
       <tbody>
         <tr className="total-row">
-          <td>Total employer cost</td>
+          <td>
+            Total employer cost
+            <small className="row-note">
+              Each line is rounded to the penny; totals are calculated before
+              rounding, so adding the lines by hand can differ by 1p.
+            </small>
+          </td>
           <td className="money">{formatGBP(year.total_employer_cost)}</td>
           <td colSpan={3} />
         </tr>

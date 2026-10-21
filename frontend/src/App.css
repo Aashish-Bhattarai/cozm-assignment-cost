@@ -221,6 +221,12 @@ footer {
   font-size: 0.9rem;
 }
 
+.source-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .source-list {
   display: flex;
   gap: 1rem;
