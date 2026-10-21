@@ -1,6 +1,7 @@
-"""URL configuration for the Assignment Cost Estimate API.
+"""URL configuration for the Assignment Cost Estimate API."""
 
-Later slices add the estimator endpoints here.
-"""
+from django.urls import include, path
 
-urlpatterns = []
+urlpatterns = [
+    path("api/", include("estimator.urls")),
+]
