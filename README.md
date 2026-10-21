@@ -12,7 +12,7 @@ Every tax rule and immigration requirement links to the official page it came fr
 ## Requirements
 
 - Python 3.12 or newer
-- Node.js 20 or newer (includes npm)
+- Node.js 20.19+ or 22.12+ (includes npm)
 
 No API keys, accounts or environment variables are needed.
 

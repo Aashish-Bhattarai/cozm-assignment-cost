@@ -34,7 +34,7 @@ FEDERAL_BANDS = [
     (Decimal("33200"), Decimal("138.60"), Decimal("0.88")),
     (Decimal("43500"), Decimal("229.20"), Decimal("2.64")),
     (Decimal("58000"), Decimal("612.00"), Decimal("2.97")),
-    (Decimal("76200"), Decimal("1152.55"), Decimal("5.94")),
+    (Decimal("76200"), Decimal("1152.50"), Decimal("5.94")),
     (Decimal("82100"), Decimal("1502.95"), Decimal("6.60")),
     (Decimal("108900"), Decimal("3271.75"), Decimal("8.80")),
     (Decimal("141500"), Decimal("6140.55"), Decimal("11.00")),
@@ -221,8 +221,9 @@ def hypothetical_swiss_tax(gross_salary: Decimal) -> SwissTaxResult:
     expenses = professional_expenses(net_salary)
     income_after_deductions = net_salary - expenses
 
-    federal_taxable_income = income_after_deductions - FEDERAL_INSURANCE_DEDUCTION
-    zurich_taxable_income = income_after_deductions - ZURICH_INSURANCE_DEDUCTION
+    # Deductions can exceed a very small income; taxable income never goes below zero.
+    federal_taxable_income = max(income_after_deductions - FEDERAL_INSURANCE_DEDUCTION, Decimal("0"))
+    zurich_taxable_income = max(income_after_deductions - ZURICH_INSURANCE_DEDUCTION, Decimal("0"))
 
     federal_tax = federal_income_tax(federal_taxable_income)
     simple_tax = zurich_simple_tax(zurich_taxable_income)

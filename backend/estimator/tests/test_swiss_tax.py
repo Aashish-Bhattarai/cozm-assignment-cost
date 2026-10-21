@@ -40,6 +40,10 @@ class FederalIncomeTaxTests(SimpleTestCase):
     def test_lower_band(self):
         self.assertEqual(federal_income_tax(Decimal("69933.60")), Decimal("965.43"))
 
+    def test_matches_the_official_table_row_at_79000(self):
+        # ESTV table 58c, 2026: 79 000 -> 1 318.82 (1,152.50 + 28 x 5.94).
+        self.assertEqual(federal_income_tax(Decimal("79000")), Decimal("1318.82"))
+
     def test_flat_top_rate(self):
         self.assertEqual(federal_income_tax(Decimal("800000")), Decimal("92000.00"))
 
@@ -98,3 +102,10 @@ class HypotheticalSwissTaxTests(SimpleTestCase):
     def test_professional_expenses_maximum(self):
         r = hypothetical_swiss_tax(Decimal("170000"))
         self.assertEqual(r.professional_expenses, Decimal("4000"))
+
+    def test_very_small_salary_never_gives_negative_taxable_income(self):
+        r = hypothetical_swiss_tax(Decimal("3000"))
+        self.assertEqual(r.federal_taxable_income, Decimal("0"))
+        self.assertEqual(r.zurich_taxable_income, Decimal("0"))
+        # Only the flat personal tax remains, which every resident pays.
+        self.assertEqual(r.total_tax, Decimal("24"))

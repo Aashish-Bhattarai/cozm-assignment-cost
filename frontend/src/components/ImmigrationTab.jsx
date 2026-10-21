@@ -60,7 +60,7 @@ export default function ImmigrationTab() {
             ))}
           </select>
         </label>
-        <ErrorMessage messages={errors.__all__} />
+        <ErrorMessage messages={errors.__all__ ?? errors.sponsor_size} />
       </div>
 
       {isLoading && <p>Loading…</p>}

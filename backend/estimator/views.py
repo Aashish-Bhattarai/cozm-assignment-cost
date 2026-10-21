@@ -12,7 +12,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from .costing import estimate_assignment_cost
 from .forms import EstimateForm
-from .immigration import SPONSOR_SIZES, immigration_guidance
+from .immigration import immigration_guidance
 
 TWO_PLACES = Decimal("0.01")
 
@@ -53,7 +53,8 @@ def estimate(request):
     """POST /api/estimate: cost the fixed two-year assignment."""
     try:
         body = json.loads(request.body)
-    except json.JSONDecodeError:
+    except ValueError:
+        # Covers invalid JSON and bytes that are not valid UTF-8 text.
         return JsonResponse(
             {"errors": {"__all__": ["The request body must be valid JSON."]}},
             status=400,
@@ -73,16 +74,8 @@ def estimate(request):
 def immigration(request):
     """GET /api/immigration: the UK immigration route, costs and timeline."""
     sponsor_size = request.GET.get("sponsor_size", "medium_large")
-    if sponsor_size not in SPONSOR_SIZES:
-        supported = ", ".join(SPONSOR_SIZES)
-        return JsonResponse(
-            {
-                "errors": {
-                    "sponsor_size": [
-                        f'Unknown sponsor size "{sponsor_size}". Choose one of: {supported}.'
-                    ]
-                }
-            },
-            status=400,
-        )
-    return JsonResponse(to_json(immigration_guidance(sponsor_size)))
+    try:
+        guidance = immigration_guidance(sponsor_size)
+    except ValueError as error:
+        return JsonResponse({"errors": {"sponsor_size": [str(error)]}}, status=400)
+    return JsonResponse(to_json(guidance))

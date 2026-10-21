@@ -69,6 +69,13 @@ class EstimateApiTests(SimpleTestCase):
             response.json()["errors"]["__all__"], ["The request body must be valid JSON."]
         )
 
+    def test_body_that_is_not_text_is_rejected_not_crashed(self):
+        response = self.client.post(
+            "/api/estimate", data=b"\x80\x81abc", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("__all__", response.json()["errors"])
+
     def test_get_is_not_allowed(self):
         response = self.client.get("/api/estimate")
         self.assertEqual(response.status_code, 405)

@@ -48,11 +48,12 @@ Status: FINAL CANDIDATE, 20 Oct 2026. Every decision is grounded in the brief or
   - Flat professional expenses: 3% of net salary, min 2,000, max 4,000 → 4,000. Federal: https://www.estv2.admin.ch/stp/sm/2024/berufskosten-de-fr.pdf ; Zurich VPBU (from tax period 2026): "3% des Nettolohns, mindestens jedoch Fr. 2000 höchstens Fr. 4000" https://www.estv2.admin.ch/stp/kb/zh-de.pdf ; 2026 unchanged: "Bei den Abzügen ändert sich aufgrund der geringen Teuerung nichts … Auch hier ergeben sich für das Steuerjahr 2026 … keine Änderungen" https://www.estv.admin.ch/de/newnsb/VzaAUrhkPx2EPde4a6e3O
   - Insurance premiums, at the statutory maximum for a person WITHOUT pillar 2/3a contributions: federal 2,700 ("Dito, für Steuerpflichtige ohne Beiträge an die Säulen 2 und 3a" https://www.estv2.admin.ch/stp/sm/2024/versicherungspraemien-zinsen-de-fr.pdf ; unchanged for 2026 per the EFD release above); Zurich 2,900 × 1.5 = 4,350 (§31 Abs. 1 lit. g StG: "von Fr. 2900 für die übrigen Steuerpflichtigen. Für Steuerpflichtige ohne Beiträge gemäss lit. d und e erhöhen sich diese Abzüge um die Hälfte." https://www.estv2.admin.ch/stp/kb/zh-de.pdf). Applied at the maximum, as the ESTV calculator does.
 - **Federal:** taxable 170,000 − 9,010 − 1,630.20 − 4,000 − 2,700 = 152,659.80. 2026 tariff (VKP): "für 141 500 Franken Einkommen … 6140.55 … und für je weitere 100 Franken Einkommen 11.00 mehr" → 6,140.55 + 111 × 11.00 = **7,361.55**. https://www.estv.admin.ch/dam/de/sd-web/gnde9CmEsalK/dbst-tairfe-58c-2026-dfi.pdf
+  - The tariff values are taken from the ESTV calculation table (form 58c) cited above. At CHF 76,200 the table gives 1,152.50, while the VKP ordinance text shows 1,152.55; the tool follows the table it cites. The test case is not affected.
 - **Zurich simple tax:** taxable 170,000 − 9,010 − 1,630.20 − 4,000 − 4,350 = 151,009.80; 2026 basic tariff (§35 StG, "Gültig ab Steuerperiode 2026") cumulative 10,476 to 144,100, then 11% → 10,476 + 69 × 11 = **11,235** (per full CHF 100). https://www.estv2.admin.ch/stp/kb/zh-de.pdf
 - **Multipliers:** canton 95% → 10,673.25 ("liegt für die Jahre 2026 und 2027 bei 95 Prozent der einfachen Staatssteuer" https://www.zh.ch/de/steuern-finanzen/steuern/steuerstatistiken/aktuelle-gemeinde-steuerfuesse.html); city 119% → 13,369.65 ("Der Steuerfuss soll bei 119 Prozent bleiben" https://www.stadt-zuerich.ch/de/aktuell/medienmitteilungen/2025/09/str-budget-2026.html ; the ESTV calculator's 2026 result applies 119%).
 - **Personal tax:** CHF 24 (§200 StG "Die Personalsteuer beträgt Fr. 24." https://www.notes.zh.ch/appl/zhlex_r.nsf/WebView/49B30E8052B9D928C125849A00480C6C/$File/631.1_8.6.97_107.pdf).
 - **Total:** 7,361.55 + 10,673.25 + 13,369.65 + 24 = **CHF 31,428.45**.
-- **Reconciliation with the ESTV calculator** https://swisstaxcalculator.estv.admin.ch/ : the calculator always adds an age-based BVG deduction (5,988 at age 40), NBU 593 and the "with pension" premium caps (1,800 / 2,900). With those defaults, the same code gives CHF 29,578, identical to the calculator's 2026 result for CHF 170,000, Zurich, single, no church tax. The tool displays this reconciliation.
+- **Reconciliation with the ESTV calculator** https://swisstaxcalculator.estv.admin.ch/ : the calculator always adds an age-based BVG deduction (5,988 at age 40), NBU 593 and the "with pension" premium caps (1,800 / 2,900). Applying those defaults to the same tariffs by hand gives CHF 29,578, identical to the calculator's 2026 result for CHF 170,000, Zurich, single, no church tax. The tool itself follows the brief (no BVG), which is why its figure (CHF 31,428.45) differs from the calculator's default.
 
 ### D5. Same rates in both years
 - UK 2026/27 for both years (brief: "Use 2026/27 UK rates for both years").
@@ -65,7 +66,7 @@ Status: FINAL CANDIDATE, 20 Oct 2026. Every decision is grounded in the brief or
 ### D7. Tax on tax (gross-up by iteration)
 - **Brief:** I = net home pay after hypothetical deductions + taxable benefits; T = UKTax(I + T); "Solve it by iteration".
 - **Official basis that employer-paid tax is taxable:** EIM00580 (pecuniary liability; case table "Employee's income tax | Hartland v Diggines") https://www.gov.uk/hmrc-internal-manuals/employment-income-manual/eim00580 ; grossing up EIM07700 https://www.gov.uk/hmrc-internal-manuals/employment-income-manual/eim07700 ; PAYE72028 https://www.gov.uk/hmrc-internal-manuals/paye-manual/paye72028 ; tax equalisation HS212 https://www.gov.uk/government/publications/tax-equalisation-hs212-self-assessment-helpsheet/tax-equalisation-2026-hs212
-- **Method:** T0 = 0; T(n+1) = UKTax(I + T(n)); stop when |T(n+1) − T(n)| < £0.000001; figures rounded to pence only for display. Each iteration is shown in the output; the closed form is used only as a cross-check.
+- **Method:** T0 = 0; T(n+1) = UKTax(I + T(n)); stop when |T(n+1) − T(n)| < £0.000001; figures rounded to pence only for display. Each iteration is shown in the output. The result was checked by hand against the closed form below.
 
 ### D8. Benefits: UK tags
 | Benefit | Tag | Taxable amount | Source |
@@ -103,7 +104,7 @@ Net home pay = (170,000 − 31,428.45 − 10,640.20) / 1.10 = **£116,301.23**. 
 | 4. Hypothetical deductions | −£28,571.32 − £9,672.91 | same |
 | **Total employer cost** | **£271,726.69 (1.76× home pay)** | **£251,825.87 (1.63×)** |
 
-Two-year total **£523,552.56 (1.69×)**. All figures are computed unrounded (T solved to < £0.000000001) and rounded only for display; T matches the closed form (0.45·I − 13,797)/0.55 that holds once the personal allowance is fully withdrawn.
+Two-year total **£523,552.56 (1.69×)**. All figures are computed unrounded (T solved to within £0.000001) and rounded only for display; T matches the closed form (0.45·I − 13,797)/0.55 that holds once the personal allowance is fully withdrawn.
 
 ## D. Immigration (tab 2)
 
