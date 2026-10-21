@@ -1,0 +1,329 @@
+/* Plain CSS, one file, top to bottom: base, layout, tabs, form, tables,
+   working details, notes, small screens. */
+
+:root {
+  --text: #1f2430;
+  --muted: #5b6472;
+  --line: #d9dee7;
+  --panel: #f4f6fa;
+  --accent: #1a4d8f;
+  --accent-dark: #12365f;
+  --error: #b3261e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: #ffffff;
+}
+
+/* --- Layout ------------------------------------------------------------- */
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.app h1 {
+  font-size: 1.6rem;
+  margin: 0 0 0.25rem;
+}
+
+header p {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* --- Tabs --------------------------------------------------------------- */
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab-active {
+  color: var(--accent-dark);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+
+/* --- Form --------------------------------------------------------------- */
+
+.cost-form {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+}
+
+.field select,
+.field input {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: inherit;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.error-messages {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+.cost-form > .error-messages {
+  margin: 0 0 1rem;
+}
+
+.primary-button {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  font: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* --- Tables ------------------------------------------------------------- */
+
+.year-section {
+  margin-bottom: 2rem;
+}
+
+.cost-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.cost-table caption {
+  text-align: left;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+}
+
+.cost-table th,
+.cost-table td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.cost-table thead th {
+  border-bottom: 2px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.cost-table td.money,
+.cost-table thead th.money {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cost-table .section-row th {
+  background: var(--panel);
+  font-size: 0.95rem;
+}
+
+.cost-table .subtotal-row td {
+  font-weight: 600;
+}
+
+.cost-table .total-row td {
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-top: 2px solid var(--line);
+}
+
+.row-note {
+  display: block;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.source-link {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.source-list {
+  display: flex;
+  gap: 1rem;
+}
+
+/* --- Working details and notes ------------------------------------------ */
+
+.working-details {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+}
+
+.working-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.working-details h4 {
+  margin: 1.25rem 0 0.25rem;
+}
+
+.working-details p {
+  margin: 0 0 0.5rem;
+}
+
+.working-details .iterations {
+  margin: 0 0 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.working-table {
+  border-collapse: collapse;
+  margin-bottom: 0.75rem;
+}
+
+.working-table th,
+.working-table td {
+  padding: 0.3rem 1rem 0.3rem 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.working-table th {
+  font-weight: 600;
+}
+
+.working-table .money {
+  text-align: right;
+  white-space: nowrap;
+  padding-right: 0;
+  padding-left: 2rem;
+}
+
+.assignment-summary {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.assignment-summary h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.assignment-summary p {
+  margin: 0 0 0.25rem;
+}
+
+.summary-figure {
+  font-size: 1.1rem;
+}
+
+.note {
+  margin-bottom: 2rem;
+}
+
+.note h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+}
+
+.note h3 {
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+
+.note ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.note li {
+  margin-bottom: 0.4rem;
+}
+
+/* --- Small screens ------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
