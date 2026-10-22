@@ -4,8 +4,8 @@ import SourceLink from "./SourceLink.jsx";
 // no source, and SourceLink renders nothing in that case.
 export default function AssumptionsList({ assumptions }) {
   return (
-    <section className="note">
-      <h2>Assumptions</h2>
+    <details className="disclosure">
+      <summary>Assumptions ({assumptions.length})</summary>
       <ul>
         {assumptions.map((assumption) => (
           <li key={assumption.text}>
@@ -13,6 +13,6 @@ export default function AssumptionsList({ assumptions }) {
           </li>
         ))}
       </ul>
-    </section>
+    </details>
   );
 }

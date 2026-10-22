@@ -1,11 +1,12 @@
 // Every official source the estimate relies on, with its full title, so the
 // reader can check any rule without hunting through the tables.
 export default function SourcesList({ sources }) {
+  const entries = Object.entries(sources);
   return (
-    <section className="note">
-      <h2>Official sources</h2>
+    <details className="disclosure">
+      <summary>Official sources ({entries.length})</summary>
       <ul>
-        {Object.entries(sources).map(([key, source]) => (
+        {entries.map(([key, source]) => (
           <li key={key}>
             <a href={source.url} target="_blank" rel="noopener noreferrer">
               {source.label}
@@ -13,6 +14,6 @@ export default function SourcesList({ sources }) {
           </li>
         ))}
       </ul>
-    </section>
+    </details>
   );
 }

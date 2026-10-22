@@ -17,7 +17,7 @@ export default function YearCostTable({ year }) {
 
   return (
     <table className="cost-table">
-      <caption>{year.label}</caption>
+      <caption className="visually-hidden">{year.label}</caption>
       <thead>
         <tr>
           <th scope="col">Item</th>
@@ -60,7 +60,9 @@ export default function YearCostTable({ year }) {
               {benefit.note && <small className="row-note">{benefit.note}</small>}
             </td>
             <td className="money">{formatGBP(benefit.cost)}</td>
-            <td>{benefit.tag}</td>
+            <td>
+              <span className="tag">{benefit.tag}</span>
+            </td>
             <td className="money">{formatGBP(benefit.taxable_amount)}</td>
             <td>
               <SourceLink source={benefit.source} />

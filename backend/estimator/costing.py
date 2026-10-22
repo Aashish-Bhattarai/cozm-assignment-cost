@@ -320,7 +320,7 @@ def assumptions(swiss: swiss_tax.SwissTaxResult) -> list[dict]:
             "source": SOURCES["sponsor_licence"],
         },
         {
-            "text": "This tool is an exercise for an assignment, not tax advice.",
+            "text": "The figures are estimates for planning the assignment, not tax advice.",
             "source": None,
         },
     ]

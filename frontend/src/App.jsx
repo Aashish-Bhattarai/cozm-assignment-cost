@@ -36,8 +36,6 @@ export default function App() {
       >
         <ImmigrationTab />
       </section>
-
-      <footer>This is an exercise, not tax advice.</footer>
     </div>
   );
 }

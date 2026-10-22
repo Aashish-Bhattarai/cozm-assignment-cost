@@ -69,8 +69,8 @@ function SwissWorking({ swissWorking }) {
 
 export default function WorkingDetails({ hostTax, swissWorking, yearLabel }) {
   return (
-    <details className="working-details">
-      <summary>Show the working for {yearLabel}</summary>
+    <details className="disclosure working-details">
+      <summary>How the figures are worked out ({yearLabel})</summary>
 
       <h4>Taxable pay before tax (I)</h4>
       <p>{formatGBP(hostTax.taxable_pay_before_tax)}</p>

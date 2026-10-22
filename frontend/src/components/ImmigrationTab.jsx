@@ -45,8 +45,8 @@ export default function ImmigrationTab() {
   }
 
   return (
-    <div>
-      <div className="field">
+    <div className="immigration">
+      <div className="field field-inline">
         <label>
           Sponsor size
           <select
@@ -63,25 +63,25 @@ export default function ImmigrationTab() {
         <ErrorMessage messages={errors.__all__ ?? errors.sponsor_size} />
       </div>
 
-      {isLoading && <p>Loading…</p>}
+      {isLoading && <p className="status">Loading…</p>}
 
       {data && !isLoading && (
         <div>
-          {data.sections.map((section) => (
-            <section className="note" key={section.title}>
-              <h3>{section.title}</h3>
-              <p>
-                <strong>{section.summary}</strong>
-              </p>
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item.text}>
-                    {item.text} <SourceLink source={item.source} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
+          <div className="info-grid">
+            {data.sections.map((section) => (
+              <section className="info-card" key={section.title}>
+                <h3>{section.title}</h3>
+                <p className="info-summary">{section.summary}</p>
+                <ul>
+                  {section.items.map((item) => (
+                    <li key={item.text}>
+                      {item.text} <SourceLink source={item.source} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
 
           <table className="cost-table">
             <caption>Costs</caption>

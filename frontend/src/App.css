@@ -1,14 +1,19 @@
-/* Plain CSS, one file, top to bottom: base, layout, tabs, form, tables,
-   working details, notes, small screens. */
+/* Plain CSS, one file, top to bottom: base, page, tabs, estimate layout,
+   form, status, summary, tables, fold-out sections, immigration, small screens.
+   Spacing uses steps of 0.25rem only. */
 
 :root {
-  --text: #1f2430;
-  --muted: #5b6472;
-  --line: #d9dee7;
-  --panel: #f4f6fa;
+  --text: #1c2230;
+  --muted: #5e6675;
+  --line: #e2e6ed;
+  --panel: #f6f7fa;
   --accent: #1a4d8f;
   --accent-dark: #12365f;
+  --accent-soft: #e8eef7;
+  --warning-soft: #fdf3dc;
+  --warning-text: #7a5300;
   --error: #b3261e;
+  --radius: 8px;
 }
 
 * {
@@ -18,22 +23,35 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--text);
   background: #ffffff;
 }
 
-/* --- Layout ------------------------------------------------------------- */
+a {
+  color: var(--accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* --- Page --------------------------------------------------------------- */
 
 .app {
-  max-width: 980px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 2rem 1.5rem 4rem;
 }
 
 .app h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin: 0 0 0.25rem;
 }
 
@@ -42,20 +60,12 @@ header p {
   margin: 0 0 1.5rem;
 }
 
-footer {
-  margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
 /* --- Tabs --------------------------------------------------------------- */
 
 .tabs {
   display: flex;
   gap: 0.25rem;
-  border-bottom: 2px solid var(--line);
+  border-bottom: 1px solid var(--line);
   margin-bottom: 1.5rem;
 }
 
@@ -63,8 +73,8 @@ footer {
   appearance: none;
   background: none;
   border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
   padding: 0.5rem 1rem;
   font: inherit;
   color: var(--muted);
@@ -81,25 +91,44 @@ footer {
   border-bottom-color: var(--accent);
 }
 
+/* --- Estimate layout: inputs on the left, results on the right ---------- */
+
+.estimate-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+/* The inputs stay in view while the results scroll; if the panel is taller
+   than the screen it scrolls on its own, and the button stays pinned. */
+.inputs-panel {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  border-radius: var(--radius);
+}
+
 /* --- Form --------------------------------------------------------------- */
 
 .cost-form {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 1.25rem 1.5rem 1.5rem;
-  margin-bottom: 2rem;
+  border-radius: var(--radius);
+  padding: 1.25rem;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 2rem;
-  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .field label {
   display: block;
+  font-size: 0.875rem;
   font-weight: 600;
 }
 
@@ -108,17 +137,30 @@ footer {
   display: block;
   width: 100%;
   margin-top: 0.25rem;
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   font: inherit;
   color: inherit;
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  border: 1px solid #cfd5df;
+  border-radius: 6px;
   background: #ffffff;
+}
+
+.field select:focus,
+.field input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--error);
+  background: #fdf3f2;
 }
 
 .help-text {
   display: block;
   margin-top: 0.25rem;
+  font-size: 0.8rem;
   color: var(--muted);
   font-weight: 400;
 }
@@ -128,7 +170,7 @@ footer {
   padding: 0;
   list-style: none;
   color: var(--error);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .cost-form > .error-messages {
@@ -137,13 +179,14 @@ footer {
 
 .primary-button {
   display: block;
-  padding: 0.5rem 1.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
   font: inherit;
   font-weight: 600;
   color: #ffffff;
   background: var(--accent);
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
@@ -152,40 +195,148 @@ footer {
 }
 
 .primary-button:disabled {
-  opacity: 0.6;
-  cursor: default;
+  opacity: 0.7;
+  cursor: progress;
 }
 
-/* --- Tables ------------------------------------------------------------- */
-
-.year-section {
-  margin-bottom: 2rem;
+/* The button stays visible at the bottom of the panel while it scrolls. */
+.cost-form .primary-button {
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0 0 0 0.75rem var(--panel);
 }
+
+/* --- Status line ---------------------------------------------------------- */
+
+.status {
+  margin: 0 0 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 0.875rem;
+}
+
+.status:empty {
+  display: none;
+}
+
+.status-stale {
+  background: var(--warning-soft);
+  color: var(--warning-text);
+}
+
+.empty-state {
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+/* Old figures fade while new ones are calculated. */
+.results-body {
+  transition: opacity 0.15s;
+}
+
+.results-body.is-updating {
+  opacity: 0.5;
+}
+
+/* --- Headline figures ----------------------------------------------------- */
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.summary-card:last-child {
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.summary-cost {
+  font-size: 1.35rem;
+}
+
+.summary-multiple {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* --- Year switch ---------------------------------------------------------- */
+
+.year-switch {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.year-button {
+  appearance: none;
+  border: none;
+  background: #ffffff;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.year-button + .year-button {
+  border-left: 1px solid var(--line);
+}
+
+.year-button.is-selected {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* --- Tables --------------------------------------------------------------- */
 
 .cost-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1.5rem;
+  font-size: 0.875rem;
 }
 
 .cost-table caption {
   text-align: left;
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 600;
   padding-bottom: 0.5rem;
 }
 
 .cost-table th,
 .cost-table td {
-  padding: 0.45rem 0.6rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
 }
 
 .cost-table thead th {
-  border-bottom: 2px solid var(--line);
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--muted);
 }
 
@@ -196,58 +347,82 @@ footer {
 }
 
 .cost-table .section-row th {
-  background: var(--panel);
-  font-size: 0.95rem;
+  padding-top: 1rem;
+  background: none;
+  color: var(--accent-dark);
+  font-size: 0.875rem;
 }
 
 .cost-table .subtotal-row td {
   font-weight: 600;
+  background: var(--panel);
 }
 
 .cost-table .total-row td {
   font-weight: 700;
-  font-size: 1.05rem;
-  border-top: 2px solid var(--line);
+  font-size: 1rem;
+  border-top: 2px solid var(--text);
+  border-bottom: none;
 }
 
 .row-note {
   display: block;
+  margin-top: 0.125rem;
+  font-size: 0.8rem;
   color: var(--muted);
   font-weight: 400;
 }
 
+.tag {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
 .source-link {
-  color: var(--accent);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .source-links {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.25rem 0.75rem;
 }
 
-.source-list {
-  display: flex;
-  gap: 1rem;
-}
+/* --- Fold-out sections ---------------------------------------------------- */
 
-/* --- Working details and notes ------------------------------------------ */
-
-.working-details {
-  background: var(--panel);
+.disclosure {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.working-details summary {
+.disclosure summary {
   cursor: pointer;
   font-weight: 600;
 }
 
+.disclosure[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.disclosure ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.disclosure li {
+  margin-bottom: 0.5rem;
+}
+
 .working-details h4 {
-  margin: 1.25rem 0 0.25rem;
+  margin: 1rem 0 0.25rem;
+  font-size: 0.875rem;
 }
 
 .working-details p {
@@ -257,22 +432,25 @@ footer {
 .working-details .iterations {
   margin: 0 0 0.5rem;
   padding-left: 1.5rem;
+  columns: 3;
+  font-size: 0.85rem;
 }
 
 .working-table {
   border-collapse: collapse;
   margin-bottom: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .working-table th,
 .working-table td {
-  padding: 0.3rem 1rem 0.3rem 0;
+  padding: 0.25rem 1rem 0.25rem 0;
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
 
 .working-table th {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .working-table .money {
@@ -282,54 +460,61 @@ footer {
   padding-left: 2rem;
 }
 
-.assignment-summary {
-  background: var(--panel);
+/* --- Immigration ---------------------------------------------------------- */
+
+.field-inline {
+  max-width: 320px;
+  margin-bottom: 1.5rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.info-card {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 2rem;
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
 }
 
-.assignment-summary h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.15rem;
-}
-
-.assignment-summary p {
+.info-card h3 {
   margin: 0 0 0.25rem;
-}
-
-.summary-figure {
-  font-size: 1.1rem;
-}
-
-.note {
-  margin-bottom: 2rem;
-}
-
-.note h2 {
-  font-size: 1.15rem;
-  margin: 0 0 0.5rem;
-}
-
-.note h3 {
   font-size: 1rem;
-  margin: 0 0 0.25rem;
 }
 
-.note ul {
-  margin: 0.5rem 0 0;
+.info-summary {
+  margin: 0 0 0.75rem;
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.info-card ul {
+  margin: 0;
   padding-left: 1.25rem;
 }
 
-.note li {
-  margin-bottom: 0.4rem;
+.info-card li {
+  margin-bottom: 0.5rem;
 }
 
-/* --- Small screens ------------------------------------------------------- */
+/* --- Small screens -------------------------------------------------------- */
 
-@media (max-width: 720px) {
-  .form-grid {
+@media (max-width: 900px) {
+  .estimate-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .inputs-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .info-grid,
+  .summary-cards {
     grid-template-columns: 1fr;
   }
 }

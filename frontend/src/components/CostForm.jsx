@@ -7,37 +7,37 @@ const NUMBER_FIELDS = [
   {
     name: "base_salary_chf",
     label: "Base salary (CHF)",
-    help: "Yearly salary in Switzerland, before any bonus.",
+    help: "Per year, before bonus.",
   },
   {
     name: "bonus_chf",
     label: "Bonus (CHF)",
-    help: "Yearly bonus paid on top of the base salary.",
+    help: "Per year.",
   },
   {
     name: "exchange_rate_chf_per_gbp",
-    label: "Exchange rate (CHF per £1)",
-    help: "How many Swiss francs one pound is worth, used to convert every figure.",
+    label: "CHF per £1",
+    help: "Converts every figure.",
   },
   {
     name: "housing_gbp_per_month",
-    label: "London housing (£ per month)",
-    help: "Rent the employer pays for the employee in London, in both years.",
+    label: "Housing (£/month)",
+    help: "London rent, both years.",
   },
   {
     name: "relocation_allowance_chf",
-    label: "Relocation allowance (CHF, year 1)",
-    help: "A one-off cash allowance for the move, paid in year 1 only.",
+    label: "Relocation (CHF)",
+    help: "Cash allowance, year 1.",
   },
   {
     name: "moving_costs_gbp",
-    label: "Moving costs (£, year 1)",
-    help: "One-off costs of moving to the UK, paid by the employer in year 1 only.",
+    label: "Moving costs (£)",
+    help: "Flights and shipping, year 1.",
   },
   {
     name: "temporary_housing_gbp",
-    label: "Temporary housing (£, year 1)",
-    help: "Short-term accommodation on arrival, paid in year 1 only.",
+    label: "Temporary housing (£)",
+    help: "First weeks on arrival, year 1.",
   },
 ];
 
@@ -62,7 +62,7 @@ export default function CostForm({ values, errors, busy, onChange, onSubmit }) {
               <option value="CH">Switzerland</option>
             </select>
           </label>
-          <HelpText>Only Switzerland is supported in this exercise.</HelpText>
+          <HelpText>Switzerland only.</HelpText>
         </div>
         <div className="field">
           <label>
@@ -74,7 +74,7 @@ export default function CostForm({ values, errors, busy, onChange, onSubmit }) {
               <option value="GB">United Kingdom</option>
             </select>
           </label>
-          <HelpText>Only the United Kingdom is supported in this exercise.</HelpText>
+          <HelpText>United Kingdom only.</HelpText>
         </div>
 
         {NUMBER_FIELDS.map((field) => (
@@ -85,6 +85,7 @@ export default function CostForm({ values, errors, busy, onChange, onSubmit }) {
                 type="number"
                 step="any"
                 value={values[field.name]}
+                aria-invalid={Boolean(errors[field.name])}
                 onChange={(event) => onChange(field.name, event.target.value)}
               />
             </label>
@@ -95,7 +96,7 @@ export default function CostForm({ values, errors, busy, onChange, onSubmit }) {
       </div>
 
       <button type="submit" className="primary-button" disabled={busy}>
-        Estimate cost
+        {busy ? "Calculating…" : "Estimate cost"}
       </button>
     </form>
   );

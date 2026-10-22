@@ -45,7 +45,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. The form is prefilled with the test case from the brief; press **Estimate cost** to see the cost table for both years. The immigration details are on the **Immigration** tab.
+Open http://localhost:5173. The test case from the brief is filled in and calculated as soon as the page opens, so the cost for both years appears straight away. Change any input and press **Estimate cost** to update the figures. The immigration details are on the **Immigration** tab.
 
 The front end forwards `/api` requests to the back end, so both must be running.
 
