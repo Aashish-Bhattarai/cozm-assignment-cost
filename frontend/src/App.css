@@ -208,12 +208,13 @@ header p {
 
 /* --- Status line ---------------------------------------------------------- */
 
+/* Normally a quiet line of context; it keeps the same size in every state so
+   the page does not jump when it turns into a warning. */
 .status {
   margin: 0 0 1rem;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  background: var(--accent-soft);
-  color: var(--accent-dark);
+  color: var(--muted);
   font-size: 0.875rem;
 }
 
@@ -256,11 +257,35 @@ header p {
   padding: 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  /* A short glow each time new numbers arrive (the cards re-mount then). */
+  animation: card-updated 0.8s ease-out;
+}
+
+@keyframes card-updated {
+  from {
+    box-shadow: 0 0 0 3px var(--accent);
+  }
+  to {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary-card {
+    animation: none;
+  }
 }
 
 .summary-card:last-child {
   background: var(--accent-soft);
   border-color: transparent;
+}
+
+/* The year shown in the table below. The shadow thickens the outline to 2px
+   without changing the card's size, so nothing shifts when the year changes. */
+.summary-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 .summary-label {
@@ -313,15 +338,16 @@ header p {
 .cost-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   font-size: 0.875rem;
 }
 
+/* Visible captions (the immigration tables) read as section headings. */
 .cost-table caption {
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
 }
 
 .cost-table th,
@@ -346,11 +372,27 @@ header p {
   white-space: nowrap;
 }
 
+/* Give the item name and its note enough room so notes do not wrap into tall,
+   narrow columns. */
+.cost-table td:first-child,
+.cost-table thead th:first-child {
+  min-width: 14rem;
+}
+
+/* Each section starts with clear space above and a firm line below, so it
+   cannot be read as part of the previous section's total. */
 .cost-table .section-row th {
-  padding-top: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 0.5rem;
   background: none;
+  border-bottom: 2px solid var(--accent-dark);
   color: var(--accent-dark);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+}
+
+/* The first section sits right under the column headings. */
+.cost-table tbody:first-of-type .section-row th {
+  padding-top: 1rem;
 }
 
 .cost-table .subtotal-row td {
@@ -390,7 +432,13 @@ header p {
 .source-links {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+
+.source-links-label {
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 /* --- Fold-out sections ---------------------------------------------------- */
@@ -471,7 +519,7 @@ header p {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .info-card {
@@ -504,8 +552,16 @@ header p {
 /* --- Small screens -------------------------------------------------------- */
 
 @media (max-width: 900px) {
+  /* minmax(0, 1fr) lets the column shrink to the screen instead of growing
+     to fit the widest table. */
   .estimate-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Wide tables scroll sideways on their own; the rest of the page fits. */
+  .cost-table {
+    display: block;
+    overflow-x: auto;
   }
 
   .inputs-panel {
@@ -515,6 +571,6 @@ header p {
 
   .info-grid,
   .summary-cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

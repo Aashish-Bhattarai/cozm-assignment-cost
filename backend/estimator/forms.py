@@ -29,6 +29,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the base salary in CHF.",
             "invalid": "Enter the base salary as a number.",
+            "min_value": "The base salary cannot be negative.",
         },
     )
     bonus_chf = forms.DecimalField(
@@ -38,6 +39,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the bonus in CHF.",
             "invalid": "Enter the bonus as a number.",
+            "min_value": "The bonus cannot be negative.",
         },
     )
     exchange_rate_chf_per_gbp = forms.DecimalField(
@@ -47,6 +49,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the exchange rate in CHF per GBP.",
             "invalid": "Enter the exchange rate as a number.",
+            "min_value": "The exchange rate must be more than 0.",
         },
     )
     housing_gbp_per_month = forms.DecimalField(
@@ -56,6 +59,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the monthly housing cost in GBP.",
             "invalid": "Enter the monthly housing cost as a number.",
+            "min_value": "The housing cost cannot be negative.",
         },
     )
     relocation_allowance_chf = forms.DecimalField(
@@ -65,6 +69,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the relocation allowance in CHF.",
             "invalid": "Enter the relocation allowance as a number.",
+            "min_value": "The relocation allowance cannot be negative.",
         },
     )
     moving_costs_gbp = forms.DecimalField(
@@ -74,6 +79,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the moving costs in GBP.",
             "invalid": "Enter the moving costs as a number.",
+            "min_value": "The moving costs cannot be negative.",
         },
     )
     temporary_housing_gbp = forms.DecimalField(
@@ -83,6 +89,7 @@ class EstimateForm(forms.Form):
         error_messages={
             "required": "Enter the temporary housing cost in GBP.",
             "invalid": "Enter the temporary housing cost as a number.",
+            "min_value": "The temporary housing cost cannot be negative.",
         },
     )
 

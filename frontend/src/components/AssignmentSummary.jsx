@@ -1,7 +1,8 @@
 import { formatGBP, formatMultiple } from "../format.js";
 
-// The three headline figures: each year and the whole assignment.
-export default function AssignmentSummary({ years, total }) {
+// The three headline figures: each year and the whole assignment. The card of
+// the year shown in the table below gets an outline.
+export default function AssignmentSummary({ years, total, selectedYear }) {
   const cards = [
     ...years.map((year) => ({
       label: year.label,
@@ -17,8 +18,11 @@ export default function AssignmentSummary({ years, total }) {
 
   return (
     <section className="summary-cards" aria-label="Total employer cost">
-      {cards.map((card) => (
-        <div className="summary-card" key={card.label}>
+      {cards.map((card, index) => (
+        <div
+          className={index === selectedYear ? "summary-card is-selected" : "summary-card"}
+          key={card.label}
+        >
           <span className="summary-label">{card.label}</span>
           <strong className="summary-cost">{formatGBP(card.cost)}</strong>
           <span className="summary-multiple">

@@ -102,4 +102,4 @@ docs/decision-ledger.md   every decision with its official source
 
 ## Notes
 
-This is an exercise, not tax advice. Assumptions (for example, that the employee stays on the Swiss employment contract as a secondee) are listed in the tool under the cost estimate and explained in the decision ledger.
+The figures are estimates for planning the assignment, not tax advice. The assumptions behind them (for example, that the employee stays on the Swiss employment contract as a secondee) are listed in the tool under the cost estimate and explained in the decision ledger.

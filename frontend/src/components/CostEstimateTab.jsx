@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchEstimate } from "../api.js";
+import { formatGBP } from "../format.js";
 import AssignmentSummary from "./AssignmentSummary.jsx";
 import AssumptionsList from "./AssumptionsList.jsx";
 import CostForm from "./CostForm.jsx";
@@ -21,8 +22,16 @@ const INITIAL_VALUES = {
   temporary_housing_gbp: "4000",
 };
 
-function timeNow() {
-  return new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+// One sentence saying which inputs the numbers on screen were calculated from.
+function describeInputs(inputs, years) {
+  const pay = Number(inputs.base_salary_chf) + Number(inputs.bonus_chf);
+  const benefits = years
+    .map((year, index) => `year ${index + 1}: ${formatGBP(year.benefits_total_cost)}`)
+    .join(", ");
+  return (
+    `Based on CHF ${pay.toLocaleString("en-GB")} salary and bonus ` +
+    `at £1 = CHF ${inputs.exchange_rate_chf_per_gbp}, plus benefits (${benefits}).`
+  );
 }
 
 export default function CostEstimateTab() {
@@ -31,11 +40,14 @@ export default function CostEstimateTab() {
   const [result, setResult] = useState(null);
   // Loading from the start: the test case is estimated as soon as the page opens.
   const [isLoading, setIsLoading] = useState(true);
-  const [updatedAt, setUpdatedAt] = useState(null);
+  // The inputs behind the numbers on screen, and a counter that changes with
+  // every new result so the headline cards can briefly highlight the update.
+  const [estimatedFor, setEstimatedFor] = useState(null);
+  const [updateCount, setUpdateCount] = useState(0);
   const [inputsChanged, setInputsChanged] = useState(false);
   const [selectedYear, setSelectedYear] = useState(0);
 
-  function showResponse({ data, errors: apiErrors }) {
+  function showResponse(inputs, { data, errors: apiErrors }) {
     setIsLoading(false);
     if (apiErrors) {
       // Never leave a table for old inputs on screen next to an error.
@@ -44,13 +56,14 @@ export default function CostEstimateTab() {
       return;
     }
     setResult(data);
-    setUpdatedAt(timeNow());
+    setEstimatedFor(inputs);
+    setUpdateCount((count) => count + 1);
     setInputsChanged(false);
   }
 
   // Show the test case straight away, so the page never opens empty.
   useEffect(() => {
-    fetchEstimate(INITIAL_VALUES).then(showResponse);
+    fetchEstimate(INITIAL_VALUES).then((response) => showResponse(INITIAL_VALUES, response));
   }, []);
 
   function handleChange(name, value) {
@@ -62,16 +75,18 @@ export default function CostEstimateTab() {
     event.preventDefault();
     setIsLoading(true);
     setErrors({});
-    fetchEstimate(values).then(showResponse);
+    fetchEstimate(values).then((response) => showResponse(values, response));
   }
 
-  let status = "";
+  // Quiet context line normally; an amber warning only when the form no
+  // longer matches the numbers on screen.
+  let status = null;
   if (isLoading) {
     status = "Calculating…";
   } else if (result && inputsChanged) {
     status = "Inputs changed: press Estimate cost to recalculate.";
   } else if (result) {
-    status = `Estimate updated at ${updatedAt}.`;
+    status = describeInputs(estimatedFor, result.years);
   }
 
   const year = result?.years[selectedYear];
@@ -90,7 +105,7 @@ export default function CostEstimateTab() {
 
       <div className="results">
         <p
-          className={inputsChanged ? "status status-stale" : "status"}
+          className={inputsChanged && result ? "status status-stale" : "status"}
           role="status"
           aria-live="polite"
         >
@@ -106,7 +121,12 @@ export default function CostEstimateTab() {
 
         {result && (
           <div className={isLoading ? "results-body is-updating" : "results-body"}>
-            <AssignmentSummary years={result.years} total={result.assignment_total} />
+            <AssignmentSummary
+              key={updateCount}
+              years={result.years}
+              total={result.assignment_total}
+              selectedYear={selectedYear}
+            />
 
             <div className="year-switch" role="group" aria-label="Choose a year">
               {result.years.map((item, index) => (

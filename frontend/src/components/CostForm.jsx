@@ -27,17 +27,17 @@ const NUMBER_FIELDS = [
   {
     name: "relocation_allowance_chf",
     label: "Relocation (CHF)",
-    help: "Cash allowance, year 1.",
+    help: "Cash allowance, year\u00a01.",
   },
   {
     name: "moving_costs_gbp",
     label: "Moving costs (£)",
-    help: "Flights and shipping, year 1.",
+    help: "Flights, shipping, year\u00a01.",
   },
   {
     name: "temporary_housing_gbp",
     label: "Temporary housing (£)",
-    help: "First weeks on arrival, year 1.",
+    help: "First 4\u00a0weeks, year\u00a01.",
   },
 ];
 

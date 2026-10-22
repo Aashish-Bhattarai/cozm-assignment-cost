@@ -67,7 +67,14 @@ function SwissWorking({ swissWorking }) {
   );
 }
 
+// The iteration keeps going until T moves by less than £0.000001, so the last
+// steps all round to the same penny; showing them would only repeat the answer.
+function stepsThatChangeThePenny(iterations) {
+  return iterations.filter((value, index) => index === 0 || value !== iterations[index - 1]);
+}
+
 export default function WorkingDetails({ hostTax, swissWorking, yearLabel }) {
+  const steps = stepsThatChangeThePenny(hostTax.iterations);
   return (
     <details className="disclosure working-details">
       <summary>How the figures are worked out ({yearLabel})</summary>
@@ -79,11 +86,12 @@ export default function WorkingDetails({ hostTax, swissWorking, yearLabel }) {
       <p className="help-text">
         The employer pays the UK tax on top of the pay, and that payment is itself
         taxed, so the tax is found by repeating the calculation until two guesses
-        in a row agree.
+        in a row agree. The calculation took {hostTax.iterations.length} steps; the
+        ones that no longer change the result to the penny are not listed.
       </p>
       <ol className="iterations">
-        {hostTax.iterations.map((iteration, index) => (
-          <li key={index}>{formatGBP(iteration)}</li>
+        {steps.map((step, index) => (
+          <li key={index}>{formatGBP(step)}</li>
         ))}
       </ol>
 

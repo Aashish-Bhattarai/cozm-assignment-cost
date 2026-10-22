@@ -17,13 +17,15 @@ export default function SourceLink({ source }) {
   );
 }
 
-// Several sources for one row, shown as "Source 1", "Source 2", ...
+// Several sources for one row, shown compactly as "Sources 1 2 3"; each
+// number's tooltip and accessible name carry the source's full title.
 export function SourceLinks({ sources }) {
   if (!sources || sources.length === 0) {
     return null;
   }
   return (
     <span className="source-links">
+      <span className="source-links-label">Sources</span>
       {sources.map((source, index) => (
         <a
           key={source.url}
@@ -32,8 +34,9 @@ export function SourceLinks({ sources }) {
           target="_blank"
           rel="noopener noreferrer"
           title={source.label}
+          aria-label={`Source ${index + 1}: ${source.label}`}
         >
-          Source {index + 1}
+          {index + 1}
         </a>
       ))}
     </span>
