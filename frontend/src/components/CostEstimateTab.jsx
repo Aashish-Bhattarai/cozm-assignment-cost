@@ -22,7 +22,7 @@ const INITIAL_VALUES = {
 };
 
 function timeNow() {
-  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  return new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
 }
 
 export default function CostEstimateTab() {
@@ -69,9 +69,9 @@ export default function CostEstimateTab() {
   if (isLoading) {
     status = "Calculating…";
   } else if (result && inputsChanged) {
-    status = "Inputs changed: press Estimate cost to update the figures.";
+    status = "Inputs changed: press Estimate cost to recalculate.";
   } else if (result) {
-    status = `Figures updated at ${updatedAt}.`;
+    status = `Estimate updated at ${updatedAt}.`;
   }
 
   const year = result?.years[selectedYear];
@@ -99,7 +99,7 @@ export default function CostEstimateTab() {
 
         {!result && !isLoading && (
           <p className="empty-state">
-            No figures to show yet. Check the messages in the form, then press
+            No estimate to show yet. Check the messages in the form, then press
             Estimate cost.
           </p>
         )}
