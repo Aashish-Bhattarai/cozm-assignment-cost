@@ -7,7 +7,7 @@ A small tool that estimates what it costs an employer to send an employee from S
 
 Every tax rule and immigration requirement links to the official page it came from. The decisions behind the figures, with their sources, are in [docs/decision-ledger.md](docs/decision-ledger.md).
 
-**Walkthrough video (Loom):** _link added after recording_
+**Walkthrough video (Loom):** https://www.loom.com/share/dd04a6d21e0044d08c49fc5164c335cc
 
 ## Requirements
 
